@@ -11,7 +11,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 const persistConfig = {
   key: 'root', 
   storage,
-  whitelist: ['auth', 'cart','products'], 
+  whitelist: [ 'cart'], 
 };
 const rootReducer = combineReducers({
 
