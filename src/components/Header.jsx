@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Cart from "../pages/Cart";
-import { useSelector } from "react-redux";
+
 
 const Header = ({ session }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -12,7 +12,7 @@ const Header = ({ session }) => {
   return (
     <header className="fixed top-0 left-0 right-0 flex flex-col sm:flex-row justify-between items-center bg-gray-900 text-white border-b border-gray-200 text-sm py-3 px-4 sm:px-6 lg:px-8 w-full h-20 z-50 shadow-xl">
       <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <Link to="/" className="text-xl font-bold">
+        <Link to="/products" className="text-xl font-bold">
           E-commerce Store
         </Link>
         <div className="space-x-4 flex items-center">

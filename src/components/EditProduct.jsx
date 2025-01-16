@@ -1,4 +1,3 @@
-// EditProductDetails.js
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductDetail } from "../Features/productSlice";
@@ -8,7 +7,6 @@ import { toastService } from "../toastify";
 const EditProductDetails = ({ productId }) => {
   const dispatch = useDispatch();
 
-  
   const product = useSelector((state) =>
     state.products.products.find((product) => product.id === productId)
   );
@@ -21,13 +19,13 @@ const EditProductDetails = ({ productId }) => {
     category: "",
     image: "",
   });
-
+  const [loading, setLoading] = useState(false); 
   const openDialog = () => setIsDialogOpen(true);
   const closeDialog = () => setIsDialogOpen(false);
 
   useEffect(() => {
     if (productId) {
-      dispatch(getProductDetail(productId)); 
+      dispatch(getProductDetail(productId));
     }
   }, [dispatch, productId]);
 
@@ -48,14 +46,22 @@ const EditProductDetails = ({ productId }) => {
     setProductDetails({ ...productDetails, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-   
+
+    setLoading(true); 
+
     const updatedDetails = { ...productDetails, price: Number(productDetails.price) };
-    console.log(updatedDetails,'......55......')
-    dispatch(updateProductDetail({ productId, productDetails: updatedDetails })); 
-    toastService.success("Product details updated successfully!");
-    closeDialog();
+
+    try {
+      await dispatch(updateProductDetail({ productId, productDetails: updatedDetails }));
+      toastService.success("Product details updated successfully!");
+      closeDialog();
+    } catch (error) {
+      toastService.error("Failed to update product details. Please try again.");
+    } finally {
+      setLoading(false); 
+    }
   };
 
   return (
@@ -123,8 +129,12 @@ const EditProductDetails = ({ productId }) => {
                   className="border p-2 mb-2 w-full"
                 />
                 <div className="flex justify-end space-x-2">
-                  <button type="submit" className="bg-green-600 text-white py-2 px-4 rounded">
-                    Save Changes
+                  <button
+                    type="submit"
+                    className={`bg-green-600 text-white py-2 px-4 rounded ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    disabled={loading} // Disable button while loading
+                  >
+                    {loading ? 'Updating...' : 'Save Changes'}
                   </button>
                 </div>
               </form>
